@@ -1,0 +1,16 @@
+@title "home"
+@page "/"
+@code {
+    // This is where your logic would go
+    print("hello from @code block")
+}
+
+<column_block style={ background[#000] width[100%] height[100%] }>
+    <row_block style={ background[#ddf] height[60] }>
+        <text style={ font_size[24] background[#cce] }>MY GUi</text>
+    </row_block>
+    <column_block style={ background[#fefefe] height[90%] }>
+        <text style={ font_size[16] }>Welcome to the test!</text>
+        <button>YAYYYYYYYYYY</button>
+    </column_block>
+</column_block>
