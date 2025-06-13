@@ -48,6 +48,13 @@ pip install PySide6
 python main.py
 ```
 
+## Progress
+- parsing [done]
+- multiple page support [in progress]
+- css support [in progress]
+- code support
+- local storage support
+- and more ...
 
 ---
 
