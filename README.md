@@ -1,4 +1,4 @@
-# WhyGUI (IN DEVELOPMENT)
+# WhyGUI (IN GRAVE)
 
 **WhyGUI** is a minimal, custom GUI framework inspired by JSX, XML, and templating engines — but with zero HTML or CSS.
 
