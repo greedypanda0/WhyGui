@@ -1,132 +1,59 @@
 import sys
-from PySide6.QtWidgets import (
-    QApplication,
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-    QSizePolicy,
-)
-from PySide6.QtGui import QColor, QPalette, QFont
+from .add_component import add_component
+from .parse_style import parse_style
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 
 
 class pyside_gui:
-    def __init__(self):
+    def __init__(self, watch_dog):
         self.app = QApplication(sys.argv)
         self.window = QWidget()
-        self.layout = QVBoxLayout()
-        self.window.setLayout(self.layout)
         self.window.resize(800, 600)
         self.window.setWindowTitle("WhyGUI")
+        self.watch_dog = watch_dog
+
+        # outer layout
+        self.layout = QVBoxLayout()
+        self.window.setLayout(self.layout)
+        print(self.window.size())
+
+    def init(self):
+        print("helooooo")
+        self.render_page("/")
+        self.run_app()
 
     def build_from_json(self, data):
         for node in data:
-            widget = self.add_component(node)
-            styled_widget = self.parse_style(widget)
+            widget = add_component(self, node)
+            styled_widget = parse_style(widget)
             self.layout.addWidget(styled_widget)
-        self.window.show()
-
-    def add_component(self, comp):
-        ctype = comp["tag"]
-        props = comp.get("props", {})
-        children = comp.get("children", [])
-
-        if ctype == "text":
-            label = QLabel(comp.get("node_value", ""))
-            label.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
-            label.props = props
-            return label
-
-        elif ctype == "button":
-            btn_text = children if isinstance(children, str) else "Click Me"
-            btn = QPushButton(btn_text)
-            btn.clicked.connect(lambda: print("Button clicked!"))
-            btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-            btn.props = props
-            return btn
-
-        elif ctype == "column_block":
-            container = QWidget()
-            layout = QVBoxLayout()
-            container.setLayout(layout)
-            container.props = props
-            for child in children:
-                child_widget = self.add_component(child)
-                layout.addWidget(self.parse_style(child_widget))
-            return container
-
-        elif ctype == "row_block":
-            container = QWidget()
-            layout = QHBoxLayout()
-            container.setLayout(layout)
-            container.props = props
-            for child in children:
-                child_widget = self.add_component(child)
-                layout.addWidget(self.parse_style(child_widget))
-            return container
-
-        else:
-            print(f"Unknown component type: {ctype}")
-            unknown = QWidget()
-            unknown.props = props
-            return unknown
-
-    def parse_style(self, component):
-        style = component.props.get("style", {})
-
-        if not isinstance(style, dict):
-            return component
-
-        # Background color
-        if "background" in style:
-            color = QColor(style["background"])
-            palette = component.palette()
-            palette.setColor(QPalette.Window, color)
-            component.setAutoFillBackground(True)
-            component.setPalette(palette)
-
-        # Text override
-        if "text" in style and hasattr(component, "setText"):
-            component.setText(str(style["text"]))
-
-        # Font size
-        if "font_size" in style:
-            font = component.font()
-            font.setPointSize(int(style["font_size"]))
-            component.setFont(font)
-
-        # Width and height
-        width = self.parse_dimension(style.get("width"), axis="width")
-        height = self.parse_dimension(style.get("height"), axis="height")
-
-        if width is not None or height is not None:
-            component.setMinimumSize(width or 0, height or 0)
-            component.setMaximumSize(width or 10000, height or 10000)
-
-        return component
-
-    def parse_dimension(self, value, axis="width"):
-        if not value:
-            return None
-
-        if isinstance(value, int):
-            return value
-
-        if isinstance(value, str):
-            value = value.strip()
-            if value.endswith("%"):
-                percent = int(value[:-1])
-                base = (
-                    self.window.size().width()
-                    if axis == "width"
-                    else self.window.size().height()
-                )
-                return int(base * percent / 100)
-            elif value.isdigit():
-                return int(value)
-
-        return None
 
     def run_app(self):
+        self.window.show()
         self.app.exec()
+
+    def clear_layout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.setParent(None)
+                widget.deleteLater()
+
+    def render_page(self, path):
+        print(self.window.width(), self.window.height())
+        self.clear_layout(self.layout)
+        data = self.watch_dog.get_data(path)
+
+        tree = data.get("tree")
+        meta = data.get("meta")
+
+        self.app_path = path
+
+        if meta.get("title"):
+            self.window.setWindowTitle(meta["title"])
+
+        if meta.get("height") and meta.get("width"):
+            self.window.resize(meta["width"], meta["height"])
+    
+        self.build_from_json(tree)

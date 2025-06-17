@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "title": "home",
+    "page": "/",
+    "code": "# This is where your logic would go\n    print(\"hello from @code block\")"
+  },
+  "tree": [
+    {
+      "tag": "column_block",
+      "props": {
+        "style": {
+          "background": "#FF0000",
+          "width": "100%",
+          "height": "100%"
+        }
+      },
+      "children": [
+        {
+          "tag": "row_block",
+          "props": {
+            "style": {
+              "background": "#ddf",
+              "height": "60"
+            }
+          },
+          "children": [
+            {
+              "tag": "text",
+              "props": {
+                "style": {
+                  "font_size": "24",
+                  "background": "#cce"
+                }
+              },
+              "children": [],
+              "node_value": "MY GUi"
+            }
+          ]
+        },
+        {
+          "tag": "column_block",
+          "props": {
+            "style": {
+              "background": "#fefefe",
+              "height": "90%"
+            }
+          },
+          "children": [
+            {
+              "tag": "text",
+              "props": {
+                "style": {
+                  "font_size": "16"
+                }
+              },
+              "children": [],
+              "node_value": "Welcome to the test!"
+            },
+            {
+              "tag": "button",
+              "props": {},
+              "children": [],
+              "node_value": "YAYYYYYYYYYY"
+            },
+            {
+              "tag": "link",
+              "props": {
+                "href": "/counter"
+              },
+              "children": [],
+              "node_value": "helloooo"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
