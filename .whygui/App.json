@@ -2,7 +2,7 @@
   "meta": {
     "title": "home",
     "page": "/",
-    "code": "# This is where your logic would go\n    print(\"hello from @code block\")"
+    "code": "user = \"hello\"\n    def on_click_fn():\n        user = \"clicked\""
   },
   "tree": [
     {
@@ -54,13 +54,15 @@
                 }
               },
               "children": [],
-              "node_value": "Welcome to the test!"
+              "node_value": "Welcome to the test! {user}"
             },
             {
               "tag": "button",
-              "props": {},
+              "props": {
+                "onclick": {}
+              },
               "children": [],
-              "node_value": "YAYYYYYYYYYY"
+              "node_value": "{user}"
             },
             {
               "tag": "link",

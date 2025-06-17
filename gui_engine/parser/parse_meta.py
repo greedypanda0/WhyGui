@@ -1,13 +1,14 @@
 import re
+import textwrap
+
 def parse_meta(raw):
-    pattern = r'@(\w+)(?:\s+"(.*?)"|)\s*(?:{(.*?)}|)'
+    pattern = r'@(\w+)\s+(?:"(.*?)"|{(.*?)})'
     matches = re.findall(pattern, raw, re.DOTALL)
 
     meta = {}
-    for name, val, block in matches:
+    for key, val, block in matches:
         if block:
-            meta[name] = block.strip()
-        elif val:
-            meta[name] = val.strip()
-            
+            meta[key] = textwrap.dedent(block.strip())
+        else:
+            meta[key] = val.strip()
     return meta

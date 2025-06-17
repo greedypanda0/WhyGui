@@ -1,8 +1,9 @@
 @title "home"
 @page "/"
 @code {
-    # This is where your logic would go
-    print("hello from @code block")
+    user = "hello"
+    def on_click_fn():
+        user = "clicked"
 }
 
 <column_block style={ background[#FF0000] width[100%] height[100%] }>
@@ -10,8 +11,8 @@
         <text style={ font_size[24] background[#cce] }>MY GUi</text>
     </row_block>
     <column_block style={ background[#fefefe] height[90%] }>
-        <text style={ font_size[16] }>Welcome to the test!</text>
-        <button>YAYYYYYYYYYY</button>
+        <text style={ font_size[16] }>Welcome to the test! {user}</text>
+        <button onclick={on_click_fn}>{user}</button>
         <link href="/counter">helloooo</link>
     </column_block>
 </column_block>

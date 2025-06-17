@@ -2,7 +2,7 @@ import sys
 from .add_component import add_component
 from .parse_style import parse_style
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
-
+from .parse_code import eval_code
 
 class pyside_gui:
     def __init__(self, watch_dog):
@@ -11,6 +11,7 @@ class pyside_gui:
         self.window.resize(800, 600)
         self.window.setWindowTitle("WhyGUI")
         self.watch_dog = watch_dog
+        self.runtime_props = {}
 
         # outer layout
         self.layout = QVBoxLayout()
@@ -41,15 +42,18 @@ class pyside_gui:
                 widget.deleteLater()
 
     def render_page(self, path):
-        print(self.window.width(), self.window.height())
         self.clear_layout(self.layout)
         data = self.watch_dog.get_data(path)
 
         tree = data.get("tree")
         meta = data.get("meta")
-
+        
+        print(meta)
         self.app_path = path
-
+        
+        if meta.get("code"):
+            eval_code(meta["code"], self.runtime_props)
+            
         if meta.get("title"):
             self.window.setWindowTitle(meta["title"])
 

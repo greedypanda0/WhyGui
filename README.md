@@ -50,10 +50,9 @@ python main.py
 
 ## Progress
 - parsing [done]
-- multiple page support [in progress]
-- css support [in progress]
+- multiple page support [done]
+- css support [done]
 - code support
-- local storage support
 - and more ...
 
 ---
